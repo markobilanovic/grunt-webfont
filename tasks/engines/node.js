@@ -95,7 +95,15 @@ module.exports = function(o, allDone) {
 
 	// Font types
 	var typesToGenerate = o.types.slice();
-	if (o.types.indexOf('woff2') !== -1 && o.types.indexOf('ttf'  === -1)) typesToGenerate.push('ttf');
+	if (o.types.indexOf('woff2') !== -1) {
+		// woff2 will be converted from TTF later,
+		// if we leave it 'createFontWriter' breaks on writing file
+		typesToGenerate.splice(o.types.indexOf('woff2'), 1);
+		if (o.types.indexOf('ttf'  === -1)) {
+			typesToGenerate.push('ttf');
+		}
+	}
+
 	typesToGenerate.forEach(function(type) {
 		steps.push(createFontWriter(type));
 	});
